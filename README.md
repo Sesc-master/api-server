@@ -25,12 +25,12 @@ Caches are objects, that implements [ICache](src/utils/ICache.ts) interface. The
 There used simple [Cache class](src/utils/cache.ts) and [caches](src/caches.ts), that store data in memory, like common object's fields. But others that implement the ICache interface can be used.
 
 ### Parsers
-[Parsers](src/sesc/parsers) are just functions, that parse html pages or JS scripts from [site of SESC UrFU](https://lyceum.urfu.ru). List of them below, in table of updaters. 
+[Parsers](src/sesc/parsers) are just functions, that parse html pages or JS scripts from [site of SESC UrFU](https://lyceum.urfu.ru). List of them below, in table of updaters.
 
 ### Updaters
-[Updaters](src/updaters.ts) are objects of [Updater](src/utils/updater.ts) class, that execute updater function by schedule and load value to provided cache. If updater function returned new value (that not equals with last), updater execute onChange function (if provided) and force to update updaters, that set that this updater is required. 
+[Updaters](src/updaters.ts) are objects of [Updater](src/utils/updater.ts) class, that execute updater function by schedule and load value to provided cache. If updater function has returned new value (that is not equal with previous one), updater executes onChange function (if this one`s provided) and triggers updaters, which are subscribed to executed one.
 
-| Updater               | Parsers                                                                                                                           | Schedule         | Required              | link                                                                  |
+| Updater               | Parsers                                                                                                                           | Parsing time     | Required              | link                                                                  |
 |-----------------------|-----------------------------------------------------------------------------------------------------------------------------------|------------------|-----------------------|-----------------------------------------------------------------------|
 | IDsUpdater            | [parseIDs.ts](src/sesc/parsers/parseIDs.ts)                                                                                       | 09-01-07:00      |                       | https://lyceum.urfu.ru/ucheba/raspisanie-zanjatii                     |
 | calendarChartsUpdater | [parseCalendarChart.ts](src/sesc/parsers/parseCalendarChart.ts) [parseLessonsTimings.ts](src/sesc/parsers/parseLessonsTimings.ts) | 09-01-07:00      |                       | https://lyceum.urfu.ru/fileadmin/user_upload/scripts/zvonkiCalGraf.js |
@@ -42,7 +42,7 @@ There used simple [Cache class](src/utils/cache.ts) and [caches](src/caches.ts),
 [SESCRequest](src/sesc/request.ts) is function, that just return body of HTTPS response as string by options or URL. Also, it redoes HTTPS request, if got stub page with text `Page is being generated.`. And if got 502 HTTP code, function locks for a time in `SESC_REQUEST_LOCK_DELAY` environment variable. These 2 aspects are necessary, because of the CRM and nginx configuration used on the [SESC UrFU site](https://lyceum.urfu.ru).
 
 ## Environment
-This is example .env file:
+This is an example .env file:
 ```shell
 PORT=4000
 
@@ -56,19 +56,19 @@ GRAPHQL_LANDING_PAGE=playground
 SCHEDULING_TZ=Asia/Yekaterinburg
 ```
 ### PORT
-This variable specifies port, that server will listen. Default is 4000.
+This variable specifies port, on which server will listen. Default value is 4000.
 
 ### SESC_REQUEST_LOCK_DELAY
-This variable specifies delay in milliseconds for SESCRequest function, details above in SESCRequest paragraph. Default is 10000.
+This variable specifies delay in milliseconds for SESCRequest function, details above in SESCRequest paragraph. Default value is 10000.
 
 ### WEEKDAY_DELAY
-This variable specifies delay in milliseconds between several requests for schedules of weekday. Default is 10000.
+This variable specifies delay in milliseconds between several requests for schedules of weekday. Default value is 10000.
 
 ### SCHEDULE_TYPE_DELAY
-This variable specifies delay in milliseconds between several requests for schedules of weekday with different types. Default is 10000.
+This variable specifies delay in milliseconds between several requests for schedules of weekday with different types. Default value is 10000.
 
 ### GRAPHQL_LANDING_PAGE
-This variable specifies landing page of graphql endpoint. If it set "playground", on endpoint in browser will be [GraphQL Playground](https://www.apollographql.com/docs/apollo-server/v2/testing/graphql-playground) page, otherwise nothing.
+This variable specifies landing page of graphql endpoint. If it is set "playground", on endpoint in browser will be [GraphQL Playground](https://www.apollographql.com/docs/apollo-server/v2/testing/graphql-playground) page, otherwise nothing.
 
 ### SCHEDULING_TZ
-This variable specifies timezone for schedules of updaters. Default is "Asia/Yekaterinburg", because SESC UrFU located in Yekaterinburg. 
+This variable specifies timezone for schedules of updaters. Default is "Asia/Yekaterinburg", because of SESC UrFU location. 
