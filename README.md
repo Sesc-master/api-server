@@ -37,7 +37,7 @@ There used simple [Cache class](src/utils/cache.ts) and [caches](src/caches.ts),
 | announcementsUpdater  | [parseAnnouncements.ts](src/sesc/parsers/parseAnnouncements.ts)                                                                   | 07:00            |                       | https://lyceum.urfu.ru/dopolnitelnye-stranicy/objavlenija             |
 | schedulesUpdater      |                                                                                                                                   | Every 30 minutes | IDsUpdater            | https://lyceum.urfu.ru/ucheba/raspisanie-zanjatii                     |
 | eatTimingsUpdater     | [parseEatTimings.ts](src/sesc/parsers/parseEatTimings.ts)                                                                         | 09-01-07:00      | calendarChartsUpdater | https://lyceum.urfu.ru/ucheba/godovoi-kalendarnyi-grafik              |
-расписание
+
 ### SESCRequest
 [SESCRequest](src/sesc/request.ts) is function, that just return body of HTTPS response as string by options or URL. Also, it redoes HTTPS request, if got stub page with text `Page is being generated.`. And if got 502 HTTP code, function locks for a time in `SESC_REQUEST_LOCK_DELAY` environment variable. These 2 aspects are necessary, because of the CRM and nginx configuration used on the [SESC UrFU site](https://lyceum.urfu.ru).
 
