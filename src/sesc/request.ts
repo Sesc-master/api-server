@@ -2,7 +2,7 @@ import {request, RequestOptions} from "node:https";
 import {Buffer} from "node:buffer";
 import {env} from "process";
 
-const lockTimeout = env.SESC_REQUEST_LOCK_DELAY ?? 10000;
+const lockDelay = parseInt(env.SESC_REQUEST_LOCK_DELAY ?? "10000");
 let lastLockTime = 0;
 
 type HTTPSResponse = {
@@ -24,15 +24,18 @@ const HTTPSRequest = (options: string | RequestOptions | URL) => new Promise<HTT
                 body: body.toString()
             });
         });
+
+        res.on("error", reject);
     });
 
     clientRequest.on("timeout", () => reject("timeout"));
+    clientRequest.on("error", reject);
     clientRequest.end();
 });
 
 export default async function SESCRequest(options: string | RequestOptions | URL): Promise<string> {
     while (true) {
-        if (Date.now() - lastLockTime < lockTimeout) continue;
+        if (Date.now() - lastLockTime < lockDelay) continue;
 
         let response = await HTTPSRequest(options);
 
