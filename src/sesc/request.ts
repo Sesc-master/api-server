@@ -37,14 +37,20 @@ export default async function SESCRequest(options: string | RequestOptions | URL
     while (true) {
         if (Date.now() - lastLockTime < lockDelay) continue;
 
-        let response = await HTTPSRequest(options);
+        try {
+            let response = await HTTPSRequest(options);
 
-        if (response.status == 502) {
-            lastLockTime = Date.now();
-            console.log(`${new Date().toString()} SESCRequest locked`);
-            continue;
+            if (response.status == 502) {
+                lastLockTime = Date.now();
+                console.log(`${new Date().toString()} SESCRequest locked due 502 HTTP response code`);
+                continue;
+            }
+
+            if (!response.body.includes("Page is being generated.")) return response.body;
         }
-
-        if (!response.body.includes("Page is being generated.")) return response.body;
+        catch (error) {
+            lastLockTime = Date.now();
+            console.log(`${new Date().toString()} SESCRequest locked due request error: ${error}`);
+        }
     }
 }
