@@ -17,6 +17,7 @@ export const IDsUpdater = new Updater(getIDs, IDsRecordsCache, "IDs", {
     month: 8,
     date: 1,
     hour: 7,
+    minute: 0,
     tz
 });
 
@@ -24,11 +25,13 @@ export const calendarChartsUpdater = new Updater(getCalendarChart, calendarChart
     month: 8,
     date: 1,
     hour: 7,
+    minute: 0,
     tz
 });
 
 export const announcementsUpdater = new Updater(getAnnouncements, announcementsCache, "Announcements", {
     hour: 7,
+    minute: 0,
     tz
 });
 
@@ -41,6 +44,7 @@ export const eatTimingsUpdater = new Updater(updater_getEatTimings, eatTimingsCa
     month: 8,
     date: 1,
     hour: 7,
+    minute: 0,
     tz
 }, calendarChartsUpdater);
 
