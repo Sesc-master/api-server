@@ -9,7 +9,6 @@ export type CalendarCharts = {
 }
 
 export default async function getCalendarChart (): Promise<CalendarCharts> {
-    console.log(`${new Date().toString()} called getCalendarChart`);
     return SESCRequest("https://lyceum.urfu.ru/fileadmin/user_upload/scripts/zvonkiCalGraf.js")
         .then(script => {
             return {

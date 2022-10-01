@@ -1,5 +1,6 @@
 import Schedule from "../../sesc/types/schedule";
 import {Field, Int, ObjectType} from "type-graphql";
+import {ScheduleType} from "../../sesc/api/getSchedule";
 
 type ChangeMessage = "changed" | "deleted" | "added";
 
@@ -7,6 +8,9 @@ type ChangeMessage = "changed" | "deleted" | "added";
 export default class ChangedSchedule {
     @Field(type => String)
     message: ChangeMessage
+
+    @Field(type => String)
+    type: ScheduleType;
     @Field(type => Int)
     ID: number;
     @Field(type => Int)
@@ -17,8 +21,9 @@ export default class ChangedSchedule {
     @Field(type => Schedule, {nullable: true})
     newSchedule?: Schedule;
 
-    constructor(message: ChangeMessage, ID: number, weekday: number, newSchedule: Schedule | undefined, lastSchedule: Schedule | undefined) {
+    constructor(message: ChangeMessage, type: ScheduleType, ID: number, weekday: number, newSchedule: Schedule | undefined, lastSchedule: Schedule | undefined) {
         this.message = message;
+        this.type = type;
         this.ID = ID;
         this.weekday = weekday;
         this.newSchedule = newSchedule

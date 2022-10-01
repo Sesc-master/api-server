@@ -7,7 +7,7 @@ export type IDsRecords = Record<IDsType, Map<string, number>>;
 
 const ignoringValues: Array<string> = ["Выберите класс", "Выберите аудиторию", "Выберите преподавателя", "Выберите день", "Нет", "Учитель"];
 
-export default function ParseIDs (page: HTMLElement): IDsRecords {
+export default function parseIDs (page: HTMLElement): IDsRecords {
     let IDs = Object.fromEntries(IDsTypes.map(IDType => [IDType, new Map<string, number>()])) as IDsRecords;
 
     page.getElementsByTagName("form")[0]

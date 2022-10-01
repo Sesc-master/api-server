@@ -30,19 +30,19 @@ export const schedulesOnChange = (pubSub: PubSubEngine, rootName: string) => asy
 
             if (newWeekSchedule && !oldWeekSchedule) weekdays.forEach(weekday => {
                 const newDaySchedule = newWeekSchedule.get(weekday);
-                if (newDaySchedule) pubSub.publish(topicName, new ChangedSchedule("added", ID, weekday, newDaySchedule, undefined));
+                if (newDaySchedule) pubSub.publish(topicName, new ChangedSchedule("added", scheduleType, ID, weekday, newDaySchedule, undefined));
             });
             else if (!newWeekSchedule && oldWeekSchedule) weekdays.forEach(weekday => {
                 const oldDaySchedule = oldWeekSchedule.get(weekday);
-                if (oldDaySchedule) pubSub.publish(topicName, new ChangedSchedule("deleted", ID, weekday, undefined, oldDaySchedule));
+                if (oldDaySchedule) pubSub.publish(topicName, new ChangedSchedule("deleted", scheduleType, ID, weekday, undefined, oldDaySchedule));
             });
             else if (newWeekSchedule && oldWeekSchedule) weekdays.forEach(weekday => {
                 const newDaySchedule = newWeekSchedule.get(weekday),
                       oldDaySchedule = oldWeekSchedule.get(weekday);
 
-                if (newDaySchedule && oldDaySchedule && !isEqual(newDaySchedule, oldDaySchedule)) pubSub.publish(topicName, new ChangedSchedule("changed", ID, weekday, newDaySchedule, undefined));
-                else if (newDaySchedule && !oldDaySchedule) pubSub.publish(topicName, new ChangedSchedule("added", ID, weekday, newDaySchedule, undefined));
-                else if (!newDaySchedule && oldDaySchedule) pubSub.publish(topicName, new ChangedSchedule("deleted", ID, weekday, undefined, oldDaySchedule));
+                if (newDaySchedule && oldDaySchedule && !isEqual(newDaySchedule, oldDaySchedule)) pubSub.publish(topicName, new ChangedSchedule("changed", scheduleType, ID, weekday, newDaySchedule, undefined));
+                else if (newDaySchedule && !oldDaySchedule) pubSub.publish(topicName, new ChangedSchedule("added", scheduleType, ID, weekday, newDaySchedule, undefined));
+                else if (!newDaySchedule && oldDaySchedule) pubSub.publish(topicName, new ChangedSchedule("deleted", scheduleType, ID, weekday, undefined, oldDaySchedule));
             });
         });
     }

@@ -42,15 +42,13 @@ export default async function SESCRequest(options: string | RequestOptions | URL
 
             if (response.status == 502) {
                 lastLockTime = Date.now();
-                console.log(`${new Date().toString()} SESCRequest locked due 502 HTTP response code`);
                 continue;
             }
 
-            if (!response.body.includes("Page is being generated.")) return response.body;
+            if (!response.body.includes("Page is being generated.") && response.status == 200) return response.body;
         }
         catch (error) {
             lastLockTime = Date.now();
-            console.log(`${new Date().toString()} SESCRequest locked due request error: ${error}`);
         }
     }
 }

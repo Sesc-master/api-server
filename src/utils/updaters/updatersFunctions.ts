@@ -21,8 +21,6 @@ export type Schedules = {
 }
 
 export async function getSchedules (IDs: IDsRecords) {
-    console.log(`${new Date().toString()} called getSchedules`);
-
     let result: Schedules = {fullSchedules: new Map(), schedules: new Map()};
     const requestsPull = new RequestsPull(parseInt(env.SCHEDULES_MAX_PARALLEL_REQUESTS ?? "10"));
 
@@ -50,8 +48,4 @@ export async function getSchedules (IDs: IDsRecords) {
     return result;
 }
 
-export async function updater_getEatTimings (calendarCharts: CalendarCharts) {
-    console.log(`${new Date().toString()} called getEatTimings`);
-
-    return getEatTimings(calendarCharts.lessonsTimings);
-}
+export const updater_getEatTimings = async (calendarCharts: CalendarCharts) => getEatTimings(calendarCharts.lessonsTimings);
