@@ -1,4 +1,4 @@
-import EatTiming from "./eatTimings";
+import EatTiming from "./eatTiming";
 import {Field, ObjectType} from "type-graphql";
 
 @ObjectType()

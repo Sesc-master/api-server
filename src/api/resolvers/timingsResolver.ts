@@ -1,5 +1,5 @@
 import {Arg, Query, Resolver} from "type-graphql";
-import Timing from "../../sesc/types/timings";
+import Timing from "../../sesc/types/timing";
 import ClassEatTimings from "../../sesc/types/classEatTimings";
 import {calendarChartsCache, eatTimingsCache} from "../../caches";
 import CalendarChart from "../types/calendarChart";

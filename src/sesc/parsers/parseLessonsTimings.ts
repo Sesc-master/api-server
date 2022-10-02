@@ -1,4 +1,4 @@
-import Timing from "../types/timings";
+import Timing from "../types/timing";
 
 const lessonTimingRegExp = /rzd\[(\d+)]\s+=\s+"(\d{1,2}:\d{2})\s+-\s+(\d{1,2}:\d{2})"/gm;
 

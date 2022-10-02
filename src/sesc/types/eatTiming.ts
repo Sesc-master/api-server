@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import Timing from "./timings";
+import Timing from "./timing";
 import {Field, Int, ObjectType} from "type-graphql";
 
 @ObjectType()

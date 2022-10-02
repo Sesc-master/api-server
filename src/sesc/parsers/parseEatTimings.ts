@@ -1,6 +1,6 @@
 import {HTMLElement} from "node-html-parser";
-import EatTiming from "../types/eatTimings";
-import Timing from "../types/timings";
+import EatTiming from "../types/eatTiming";
+import Timing from "../types/timing";
 import ClassEatTimings from "../types/classEatTimings";
 
 const timeRegExp = /\d{1,2}:\d{2}/g, classesRegExp = /(\d{1,2})([а-яё]+)/g;

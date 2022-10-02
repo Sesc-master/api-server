@@ -1,5 +1,5 @@
 import parseCalendarChart from "../parsers/parseCalendarChart";
-import Timing from "../types/timings";
+import Timing from "../types/timing";
 import parseLessonsTimings from "../parsers/parseLessonsTimings";
 import SESCRequest from "../request";
 import CalendarChart from "../../api/types/calendarChart";
