@@ -40,7 +40,7 @@ export const schedulesOnChange = (pubSub: PubSubEngine, rootName: string) => asy
                 const newDaySchedule = newWeekSchedule.get(weekday),
                       oldDaySchedule = oldWeekSchedule.get(weekday);
 
-                if (newDaySchedule && oldDaySchedule && !isEqual(newDaySchedule, oldDaySchedule)) pubSub.publish(topicName, new ChangedSchedule("changed", scheduleType, ID, weekday, newDaySchedule, undefined));
+                if (newDaySchedule && oldDaySchedule && !isEqual(newDaySchedule, oldDaySchedule)) pubSub.publish(topicName, new ChangedSchedule("changed", scheduleType, ID, weekday, newDaySchedule, oldDaySchedule));
                 else if (newDaySchedule && !oldDaySchedule) pubSub.publish(topicName, new ChangedSchedule("added", scheduleType, ID, weekday, newDaySchedule, undefined));
                 else if (!newDaySchedule && oldDaySchedule) pubSub.publish(topicName, new ChangedSchedule("deleted", scheduleType, ID, weekday, undefined, oldDaySchedule));
             });
