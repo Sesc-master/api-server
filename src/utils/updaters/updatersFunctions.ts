@@ -8,43 +8,45 @@ import {IDsRecords} from "../../sesc/parsers/parseIDs";
 import getFullSchedule from "../../sesc/api/getFullSchedule";
 import getEatTimings from "../../sesc/api/getEatTimings";
 import { env } from "node:process";
-import RequestsPull from "../requestsPull";
+import {queue} from "async";
 
 export {getIDs, getCalendarChart, getAnnouncements};
 
-const scheduleTypeDelay = env.SCHEDULES_TYPE_DELAY ? parseInt(env.SCHEDULES_TYPE_DELAY) : undefined,
-    weekdayDelay = env.SCHEDULES_WEEKDAY_DELAY ? parseInt(env.SCHEDULES_WEEKDAY_DELAY) : undefined;
+const maxParallelRequests = Math.max(parseInt(env.SCHEDULES_MAX_PARALLEL_REQUESTS ?? "10"), 1);
 
 export type Schedules = {
     fullSchedules: Map<number, FullSchedule>,
     schedules: Map<ScheduleType, Map<number, Map<number, Schedule>>>
 }
 
+type ScheduleGetTask = {
+    scheduleType: ScheduleType;
+    targetID: number;
+    weekdayID: number;
+}
+
 export async function getSchedules (IDs: IDsRecords) {
     let result: Schedules = {fullSchedules: new Map(), schedules: new Map()};
-    const requestsPull = new RequestsPull(parseInt(env.SCHEDULES_MAX_PARALLEL_REQUESTS ?? "10"));
+    const requestsQueue = queue(async (task: ScheduleGetTask, callback) => {
+        console.log(`start request to get schedule for type ${task.scheduleType} with ID: ${task.targetID} for weekday ${task.weekdayID}`);
+        const schedule = await getSchedule(task.scheduleType, task.targetID, task.weekdayID);
+        console.log(`finished request to get schedule for type ${task.scheduleType} with ID: ${task.targetID} for weekday ${task.weekdayID}`);
+
+        if (!result.schedules.has(task.scheduleType)) result.schedules.set(task.scheduleType, new Map());
+        if (!result.schedules.get(task.scheduleType)?.has(task.targetID)) result.schedules.get(task.scheduleType)?.set(task.targetID, new Map());
+        result.schedules.get(task.scheduleType)?.get(task.targetID)?.set(task.weekdayID, schedule);
+
+        callback();
+    }, maxParallelRequests);
 
     for (const weekdayID of IDs.weekday.values()) {
-        await requestsPull.request(getFullSchedule(weekdayID).then(weekFullSchedule => result.fullSchedules.set(weekdayID, weekFullSchedule)));
+        await getFullSchedule(weekdayID).then(weekFullSchedule => result.fullSchedules.set(weekdayID, weekFullSchedule));
         for (const scheduleType of scheduleTypes) {
             for (const targetID of IDs[scheduleType].values()) {
-                await requestsPull.request(getSchedule(scheduleType, targetID, weekdayID).then(schedule => {
-                    if (!result.schedules.has(scheduleType)) result.schedules.set(scheduleType, new Map());
-                    if (!result.schedules.get(scheduleType)?.has(targetID)) result.schedules.get(scheduleType)?.set(targetID, new Map());
-                    result.schedules.get(scheduleType)?.get(targetID)?.set(weekdayID, schedule);
-                }));
+                await requestsQueue.pushAsync({scheduleType, targetID, weekdayID});
             }
-
-            if (scheduleTypeDelay && scheduleType !== scheduleTypes[scheduleTypes.length - 1]) {
-                await new Promise<void>(resolve => setTimeout(resolve, scheduleTypeDelay));
-            }
-        }
-        if (weekdayDelay) {
-            await new Promise<void>(resolve => setTimeout(resolve, weekdayDelay));
         }
     }
-
-    await requestsPull.awaitRequests();
     return result;
 }
 

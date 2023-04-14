@@ -48,9 +48,6 @@ PORT=4000
 
 SESC_REQUEST_LOCK_DELAY=10000
 
-SCHEDULES_WEEKDAY_DELAY=10000
-SCHEDULES_TYPE_DELAY=10000
-
 SCHEDULES_MAX_PARALLEL_REQUESTS=10
 
 GRAPHQL_LANDING_PAGE=playground
@@ -59,12 +56,6 @@ SCHEDULING_TZ=Asia/Yekaterinburg
 ```
 ### PORT
 This variable specifies port, on which server will listen. Default value is `4000`.
-
-### SESC_REQUEST_LOCK_DELAY
-This variable specifies delay in milliseconds for SESCRequest function, details above in SESCRequest paragraph. Default value is `10000`.
-
-### SCHEDULES_WEEKDAY_DELAY
-This variable specifies delay in milliseconds between several requests for schedules of weekday. If it`s not defined, delay will not occur.
 
 ### SCHEDULES_TYPE_DELAY
 This variable specifies delay in milliseconds between several requests for schedules of weekday with different types. If it`s not defined, delay will not occur.
