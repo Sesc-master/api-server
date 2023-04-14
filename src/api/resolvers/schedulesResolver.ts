@@ -7,7 +7,7 @@ import UpdatedSchedule from "../types/changedSchedule";
 
 @Resolver()
 export default class SchedulesResolver {
-    @Query(type => Schedule, {nullable: true})
+    @Query(type => Schedule, {nullable: true, deprecationReason: "Use `getScheduleByName` instead"})
     async getSchedule(
         @Arg("type", returns => String) scheduleType: ScheduleType,
         @Arg("weekday", returns => Int) weekday: number,
